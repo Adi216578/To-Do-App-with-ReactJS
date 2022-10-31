@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import AddGoals from "./components/Goals/AddGoals";
+import GoalList from "./components/Goals/GoalList";
 
 function App() {
+  const [goalList, setgoalList] = useState([]);
+  const [iszero, setiszero] = useState(true);
+
+  function AddGoalHandler(title) {
+    setiszero(false);
+    setgoalList((prevList) => {
+      return [{ title: title, id: Math.random().toString() }, ...prevList];
+    });
+  }
+  function deleteGoalHandler(index) {
+    if (goalList.length === 1) {
+      setiszero(true);
+    }
+    var list = goalList;
+    list.splice(index, 1);
+
+    setgoalList([...list]);
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <AddGoals onGoalAdd={AddGoalHandler} />
+
+      {!iszero && <GoalList goals={goalList} onDelete={deleteGoalHandler} />}
+    </>
   );
 }
 
